@@ -25,6 +25,17 @@ class ListsViewTest(TestCase):
 
         self.assertIn('test1', response.content.decode())
 
+    def test_complete_todo_POST_request_works_well(self):
+        ToDo.objects.create(text = "test1")
+        
+        self.assertFalse(ToDo.objects.first().completed)
+
+        response = self.client.post(
+            '/complete_todo/',
+            data = {'id' : 1
+        })
+
+        self.assertTrue(ToDo.objects.first().completed)
 
 
 class ToDoModelTest(TestCase):
@@ -32,12 +43,14 @@ class ToDoModelTest(TestCase):
     def test_can_insert_ToDo_well(self):
         
         name= "test"
+        completed = False
 
-        ToDo.objects.create(text = name)
+        ToDo.objects.create(text = name, completed = completed)
 
         td = ToDo.objects.first()
 
         self.assertEqual(td.text ,name)
+        self.assertFalse(td.completed)
 
 class AddToDoTest(TestCase):
     """ """
