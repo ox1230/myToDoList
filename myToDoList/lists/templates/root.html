@@ -1,12 +1,19 @@
 <html>
     <head>
         <title>
-            myTodoList
+            myToDoList
         </title>
     </head>
 
     <body>
-        Yes!
+        <form method = "POST">
+            <input name = "todo_text" id = "todo_inputBox" placeholder="todo 항목 입력">
+            {% csrf_token %}
+        </form>
+
+        <table id = "todo_textBox">
+
+        </table>
     </body>
 
 </html>

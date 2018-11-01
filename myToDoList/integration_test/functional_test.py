@@ -16,5 +16,5 @@ class VisitorTest(FunctionalTest):
         self.browser.find_element_by_id("todo_inputBox").send_keys("ToDoList 만들기")
 
         # 페이지가 갱신되면서 "ToDoList 만들기"가 텍스트 상자에 입력됨
-        rows_text = self.find_rows_from_table_id("present_todo_box")
+        rows_text = self.find_rows_from_table_id("todo_textBox")
         self.assertIn('ToDoList 만들기', rows_text)

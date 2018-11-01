@@ -22,8 +22,7 @@ class ListsViewTest(TestCase):
 
         self.assertTemplateUsed(response, 'root.html')
 
-        self.assertContains(response,'첫번째')
-        self.assertContains(response,'거래내역분류')
+     
 
 class AddToDoTest(TestCase):
     """ 일단 capql에서 가져온 재활용"""

@@ -36,3 +36,9 @@ class FunctionalTest(LiveServerTestCase):
         time.sleep(1)
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url, '/{}/'.format(page))
+
+    def find_rows_from_table_id(self, id):
+        """id에서 tr을 뽑아낸 후 각 row에서 text를 뽑아내 row별 리스트로 만들어 리턴한다."""
+        table = self.browser.find_element_by_id(id)
+        rows = table.find_elements_by_tag_name('tr')
+        return [row.text for row in rows]
