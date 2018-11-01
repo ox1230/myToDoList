@@ -62,3 +62,24 @@ class VisitorTest(BaseTest):
         # 페이지가 갱신되면서 "ToDoList 만들기"가 텍스트 상자에 입력됨
         rows_text = self.find_rows_from_table_id("todo_textBox")
         self.assertIn('ToDoList 만들기', rows_text)
+
+
+    def test_completed_button_work_well(self):
+        """ 완료 처리가 제대로 되는지 체크한다. """
+
+        #edith가 해당 웹사이트 방문
+        self.browser.get(self.live_server_url)
+
+        # "ToDoList 만들기"를 텍스트 상자에 입력
+        self.browser.find_element_by_id("todo_inputBox").send_keys("ToDoList 만들기")
+        self.browser.find_element_by_id("add_todo_button").click()
+        
+        # "ToDoList 만들기"를 완료함
+        self.browser.find_element_by_id("ToDoList 만들기_complete_button").click()
+
+        # # 페이지가 갱신되면서 "ToDoList 만들기"가 완료된 todo에  입력됨
+        rows_text = self.find_rows_from_table_id("todo_textBox")
+        self.assertNotIn('ToDoList 만들기', rows_text)
+        
+        rows_text2 = self.find_rows_from_table_id("todo_complete_textbox")
+        self.assertIn('ToDoList 만들기', rows_text2)
