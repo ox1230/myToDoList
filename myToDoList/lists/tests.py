@@ -18,13 +18,15 @@ class ListsViewTest(TestCase):
 
     def test_root_url_resolves_root_page_correctly(self):
         ToDo.objects.create(text = "test1")
+        ToDo.objects.create(text = "test2", completed = True)
 
         response = self.client.get('')  
 
         self.assertTemplateUsed(response, 'root.html')
 
         self.assertIn('test1', response.content.decode())
-
+        self.assertIn('test2', response.content.decode())
+    
     def test_complete_todo_POST_request_works_well(self):
         ToDo.objects.create(text = "test1")
         
@@ -32,8 +34,7 @@ class ListsViewTest(TestCase):
 
         response = self.client.post(
             '/complete_todo/',
-            data = {'id' : 1
-        })
+            data = {'id' : 1 })
 
         self.assertTrue(ToDo.objects.first().completed)
 

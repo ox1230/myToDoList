@@ -81,5 +81,5 @@ class VisitorTest(BaseTest):
         rows_text = self.find_rows_from_table_id("todo_textBox")
         self.assertNotIn('ToDoList 만들기', rows_text)
         
-        rows_text2 = self.find_rows_from_table_id("todo_complete_textbox")
+        rows_text2 = self.find_rows_from_table_id("todo_complete_textBox")
         self.assertIn('ToDoList 만들기', rows_text2)

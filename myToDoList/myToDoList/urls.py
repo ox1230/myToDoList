@@ -18,7 +18,8 @@ from django.urls import path
 from lists import views
 
 urlpatterns = [
-     path('', views.root, name = "root"),
-      path('add_todo/', views.add_todo, name = "add_todo"),
+    path('', views.root, name = "root"),
+    path('add_todo/', views.add_todo, name = "add_todo"),
+    path('complete_todo/', views.complete_todo, name = "complete_todo"),
     path('admin/', admin.site.urls),
 ]
