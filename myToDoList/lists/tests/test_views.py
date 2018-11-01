@@ -16,12 +16,15 @@ def remove_csrf_tag(text):
     
 class ListsViewTest(TestCase):
 
-    def test_root_url_resolves_to_main_url(self):
+    def test_root_url_resolves_root_page_correctly(self):
         
         response = self.client.get('')  
 
-        self.assertRedirects(response, '/main/')
-    
+        self.assertTemplateUsed(response, 'root.html')
+
+        self.assertContains(response,'첫번째')
+        self.assertContains(response,'거래내역분류')
+
 class AddToDoTest(TestCase):
     """ 일단 capql에서 가져온 재활용"""
     @skip
