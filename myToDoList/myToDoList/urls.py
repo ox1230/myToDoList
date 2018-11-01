@@ -19,5 +19,6 @@ from lists import views
 
 urlpatterns = [
      path('', views.root, name = "root"),
+      path('add_todo/', views.add_todo, name = "add_todo"),
     path('admin/', admin.site.urls),
 ]

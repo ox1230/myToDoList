@@ -17,10 +17,15 @@ def remove_csrf_tag(text):
 class ListsViewTest(TestCase):
 
     def test_root_url_resolves_root_page_correctly(self):
-        
+        ToDo.objects.create(text = "test1")
+
         response = self.client.get('')  
 
         self.assertTemplateUsed(response, 'root.html')
+
+        self.assertIn('test1', response.content.decode())
+
+
 
 class ToDoModelTest(TestCase):
        
@@ -41,10 +46,9 @@ class AddToDoTest(TestCase):
         
         response = self.client.post(
             '/add_todo/',
-            data = {'name' : 'test'
+            data = {'todo_text' : 'test'
         })
 
         saved_history = ToDo.objects.first()
 
         self.assertEqual(saved_history.text, 'test')
-

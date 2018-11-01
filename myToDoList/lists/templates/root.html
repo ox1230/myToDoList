@@ -6,13 +6,16 @@
     </head>
 
     <body>
-        <form method = "POST">
-            <input name = "todo_text" id = "todo_inputBox" placeholder="todo 항목 입력">
+        <form method = "POST" action = '{% url "add_todo" %}'>
+            <input name = "todo_text" id = "todo_inputBox" placeholder="todo 항목 입력"  >
+            <button id = "add_todo_button" type = "submit" class = "btn btn-default">기록</button>
             {% csrf_token %}
         </form>
 
         <table id = "todo_textBox">
-            
+        {% for todo in list_of_todo %}
+            <tr><td> {{ todo.text }} </td></tr>
+        {% endfor %}
         </table>
     </body>
 
