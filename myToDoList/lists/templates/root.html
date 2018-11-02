@@ -46,7 +46,7 @@
                         <table id = "todo_textBox" class="col-xs-12 table">
                             <tr><th>완료</th><th>삭제</th><th>기한</th><th>내용</th><th>중요도</th></tr>
                             {% for todo in list_of_todo %}
-                            <tr>
+                            <tr {% if todo.due < today %} class = "danger" {% endif %}>
                                 <td><form  method = "post" action =  '{% url "complete_todo" %}'>
                                         {% csrf_token %}
                                         <input name = "id" value ="{{todo.id}}" hidden>

@@ -9,7 +9,8 @@ def root(request:HttpRequest):
         {'list_of_todo': list(ToDo.objects.filter(completed = False).exclude(due = None).order_by('-priority','due')) +
                                 list(ToDo.objects.filter(completed = False, due = None).order_by('-priority')), 
         'list_of_todo_completed' : list(ToDo.objects.filter(completed = True).exclude(due = None).order_by('due')) +
-                                        list(ToDo.objects.filter(completed = True, due = None).order_by('due'))})
+                                        list(ToDo.objects.filter(completed = True, due = None).order_by('due')),
+        'today' : date.today()})
 
 def add_todo(request:HttpRequest):
         if request.method == 'POST':
