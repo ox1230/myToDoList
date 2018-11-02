@@ -55,23 +55,25 @@ class ToDoModelTest(TestCase):
         name= "test"
         completed = False
 
-        ToDo.objects.create(text = name, completed = completed)
+        ToDo.objects.create(text = name, completed = completed, priority = 2)
 
         td = ToDo.objects.first()
 
         self.assertEqual(td.text ,name)
         self.assertFalse(td.completed)
+        self.assertEqual(td.priority, 2)
 
 class AddAndEditToDoTest(TestCase):
-    """ """
 
     def test_can_save_and_process_add_todo_POST_request(self):
         
         response = self.client.post(
             '/add_todo/',
-            data = {'todo_text' : 'test'
+            data = {'todo_text' : 'test',
+                    'todo_priority': 3
         })
 
-        saved_history = ToDo.objects.first()
+        saved_td = ToDo.objects.first()
 
-        self.assertEqual(saved_history.text, 'test')
+        self.assertEqual(saved_td.text, 'test')
+        self.assertEqual(saved_td.prioirity, 'test')

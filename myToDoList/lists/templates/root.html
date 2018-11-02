@@ -8,6 +8,11 @@
     <body>
         <form method = "POST" action = '{% url "add_todo" %}'>
             <input name = "todo_text" id = "todo_inputBox" placeholder="todo 항목 입력"  >
+            <select name = "todo_priority" id = "priority_select_box">
+                <option value = 1 selected>보통</option>
+                <option value = 2>중요</option>
+                <option value = 3>매우 중요</option>
+            </select>
             <button id = "add_todo_button" type = "submit" class = "btn btn-default">기록</button>
             {% csrf_token %}
         </form>
