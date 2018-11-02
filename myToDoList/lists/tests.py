@@ -55,13 +55,14 @@ class ToDoModelTest(TestCase):
         name= "test"
         completed = False
 
-        ToDo.objects.create(text = name, completed = completed, priority = 2)
+        ToDo.objects.create(text = name, completed = completed, priority = 2, due = date.today())
 
         td = ToDo.objects.first()
 
         self.assertEqual(td.text ,name)
         self.assertFalse(td.completed)
         self.assertEqual(td.priority, 2)
+        self.assertEqual(td.due , date.today())
 
 class AddAndEditToDoTest(TestCase):
 
@@ -70,10 +71,12 @@ class AddAndEditToDoTest(TestCase):
         response = self.client.post(
             '/add_todo/',
             data = {'todo_text' : 'test',
-                    'todo_priority': 3
+                    'todo_priority': 3,
+                    'todo_due' : date.today(),
         })
 
         saved_td = ToDo.objects.first()
 
         self.assertEqual(saved_td.text, 'test')
         self.assertEqual(saved_td.priority, 3)
+        self.assertEqual(saved_td.due , date.today())

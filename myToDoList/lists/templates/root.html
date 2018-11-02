@@ -16,7 +16,7 @@
                         <h3>My ToDo List</h3>
                         <form method = "POST" action = '{% url "add_todo" %}'>
                                 <div class = "row">
-                                    <input name = "todo_text" id = "todo_inputBox" placeholder="todo 항목 입력"  >
+                                    <input name = "todo_text" id = "todo_inputBox" placeholder="todo"  >
                                     <select name = "todo_priority" id = "priority_selectBox">
                                         <option value = 1 selected>보통</option>
                                         <option value = 2>중요</option>
@@ -25,7 +25,7 @@
                                     <button id = "add_todo_button" type = "submit" class = "btn btn-default">기록</button>
                                 </div>
                                 <div class = "row">
-
+                                    <input name = "todo_due" id = "todo_dueBox" placeholder ="Due Date" type = 'date'>
                                 </div>
                                 {% csrf_token %}
                         </form>

@@ -46,7 +46,7 @@ class BaseTest(LiveServerTestCase):
 class VisitorTest(BaseTest):
         
     def test_todo_and_can_see_it(self):
-        """기본기능이 제대로 되는지 테스트한다. ( todo 입력+ 우선순위 설정, 보기)"""
+        """기본기능이 제대로 되는지 테스트한다. ( todo 입력+ 우선순위 설정 + 날짜 설정, 보기)"""
 
         #edith가 해당 웹사이트 방문
         self.browser.get(self.live_server_url)
@@ -54,19 +54,21 @@ class VisitorTest(BaseTest):
         # 이름은 myToDoList이다.
         assert 'myToDoList' in self.browser.title
 
-        # "ToDoList 만들기- 매우 중요"를 입력
+        # "ToDoList 만들기- 매우 중요"를 입력, dueDate는 2018-11-4일까지
         self.browser.find_element_by_id("todo_inputBox").send_keys("ToDoList 만들기")
         el = self.browser.find_element_by_id('priority_selectBox')
         for option in el.find_elements_by_tag_name('option'):
             if option.text == '매우 중요':
                 option.click() 
                 break
+        self.browser.find_element_by_id("todo_due_date_inputBox").send_keys("2018-11-04")
         self.browser.find_element_by_id("add_todo_button").click()
         
 
         # 페이지가 갱신되면서 "ToDoList 만들기"가 텍스트 상자에 입력됨
         rows_text = self.find_rows_from_table_id("todo_textBox")
-        self.assertIn('ToDoList 만들기 매우 중요', rows_text)
+        self.assertIn('11-04 ToDoList 만들기 매우 중요', rows_text)
+        
 
 
     def test_completed_button_work_well(self):
