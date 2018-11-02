@@ -61,6 +61,7 @@ def edit_todo(request:HttpRequest):
                 temp.text = data['todo_text']
                 temp.priority = data['todo_priority']
                 if data['todo_due'] != "" : temp.due = datetime.strptime(data['todo_due'], "%Y-%m-%d")
+                else: temp.due = None
                 temp.save()
 
                 return redirect('root')
