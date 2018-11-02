@@ -61,13 +61,13 @@ class VisitorTest(BaseTest):
             if option.text == '매우 중요':
                 option.click() 
                 break
-        self.browser.find_element_by_id("todo_due_date_inputBox").send_keys("2018-11-04")
+        self.browser.find_element_by_id("todo_due_inputBox").send_keys("2018-11-04")
         self.browser.find_element_by_id("add_todo_button").click()
         
 
         # 페이지가 갱신되면서 "ToDoList 만들기"가 텍스트 상자에 입력됨
         rows_text = self.find_rows_from_table_id("todo_textBox")
-        self.assertIn('11-04 ToDoList 만들기 매우 중요', rows_text)
+        self.assertIn('~Nov. 4, 2018 ToDoList 만들기 매우 중요', rows_text)
         
 
 

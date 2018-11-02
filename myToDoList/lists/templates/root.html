@@ -15,18 +15,28 @@
                     <div class = "row"><div class ="col-xs-12 col-md-6 col-md-offset-3 jumbotron">
                         <h3>My ToDo List</h3>
                         <form method = "POST" action = '{% url "add_todo" %}'>
-                                <div class = "row">
-                                    <input name = "todo_text" id = "todo_inputBox" placeholder="todo"  >
-                                    <select name = "todo_priority" id = "priority_selectBox">
-                                        <option value = 1 selected>보통</option>
-                                        <option value = 2>중요</option>
-                                        <option value = 3>매우 중요</option>
-                                    </select>
-                                    <button id = "add_todo_button" type = "submit" class = "btn btn-default">기록</button>
-                                </div>
-                                <div class = "row">
-                                    <input name = "todo_due" id = "todo_dueBox" placeholder ="Due Date" type = 'date'>
-                                </div>
+                            <div class = "row">
+                                todo:
+                                <input name = "todo_text" id = "todo_inputBox" placeholder="todo" >
+                            </div>
+                            <br>
+                            <div class = "row"> 
+                                중요도:
+                                <select name = "todo_priority" id = "priority_selectBox">
+                                    <option value = 1 selected>보통</option>
+                                    <option value = 2>중요</option>
+                                    <option value = 3>매우 중요</option>
+                                </select>
+                            </div>
+                            <br>
+                            <div class = "row">
+                                기한:<input name = "todo_due" id = "todo_due_inputBox" placeholder ="Due Date" type = 'date'>
+                            </div>
+                            <br>
+                            <div class = "row">
+                                <button id = "add_todo_button" type = "submit" class = "btn btn-default">기록</button>
+                            </div>
+                            
                                 {% csrf_token %}
                         </form>
                     </div></div>
@@ -34,7 +44,7 @@
                     <div class = "row"><div class ="col-xs-12 col-md-6 col-md-offset-3 jumbotron">
                         <h3>진행중인 일들</h3>
                         <table id = "todo_textBox" class="col-xs-12 table">
-                            <tr><th>완료</th><th>삭제</th><th>내용</th><th>중요도</th></tr>
+                            <tr><th>완료</th><th>삭제</th><th>기한</th><th>내용</th><th>중요도</th></tr>
                             {% for todo in list_of_todo %}
                             <tr>
                                 <td><form  method = "post" action =  '{% url "complete_todo" %}'>
@@ -55,7 +65,7 @@
                                             <span class= "glyphicon glyphicon-remove"></span>
                                         </button>
                                 </form> </td>
-
+                                <td> {% if todo.due %}~{{ todo.due }} {% endif %} </td>
                                 <td> {{ todo.text }} </td> 
                                 <td> {% if todo.priority == 1 %}보통
                                     {% elif todo.priority == 2 %}중요
@@ -71,7 +81,7 @@
                 <div class = "row"><div class ="col-xs-12 col-md-6 col-md-offset-3 jumbotron">
                     <h3>끝난 일들</h3>
                     <table id = "todo_complete_textBox" class = "col-xs-12 table">
-                        <tr><th>삭제</th><th>내용</th></tr>
+                        <tr><th>삭제</th><th>기한</th><th>내용</th></tr>
                     {% for todo in list_of_todo_completed %}
                         <tr>
                             <td><form  method = "post" action =  '{% url "delete_todo" %}'>
@@ -83,6 +93,7 @@
                                         <span class= "glyphicon glyphicon-remove"></span>
                                     </button>
                             </form> </td>
+                            <td> {% if todo.due %}~{{ todo.due }} {% endif %}</td>
                             <td> {{ todo.text }} </td>
                         </tr> 
                     {% endfor %}
