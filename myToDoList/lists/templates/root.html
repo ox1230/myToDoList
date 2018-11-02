@@ -13,16 +13,28 @@
         </form>
 
         <table id = "todo_textBox">
-        {% for todo in list_of_todo %}
-            <tr><td> {{ todo.text }} </td> 
+            <th><td>완료</td><td>삭제</td><td>내용</td></th>
+            {% for todo in list_of_todo %}
+            <tr>
                 <td><form  method = "post" action =  '{% url "complete_todo" %}'>
-                    {% csrf_token %}
-                    <input name = "id" value ="{{todo.id}}" hidden>
-                    <button type="submit" 
-                        id = "{{todo.text}}_complete_button"
-                        data-toggle="tooltip" data-placement="top" title="완료">
-                    </button>
-                </form> </td></tr>
+                        {% csrf_token %}
+                        <input name = "id" value ="{{todo.id}}" hidden>
+                        <button type="submit" 
+                            id = "{{todo.text}}_complete_button"
+                            data-toggle="tooltip" data-placement="top" title="완료">
+                        </button>
+                </form> </td>
+                <td><form  method = "post" action =  '{% url "delete_todo" %}'>
+                        {% csrf_token %}
+                        <input name = "id" value ="{{todo.id}}" hidden>
+                        <button type="submit" 
+                            id = "{{todo.text}}_delete_button"
+                            data-toggle="tooltip" data-placement="top" title="삭제">
+                        </button>
+                </form> </td>
+
+                <td> {{ todo.text }} </td> 
+            </tr>
         {% endfor %}
         </table>
 
@@ -30,8 +42,19 @@
         <끝난 일들>
 
         <table id = "todo_complete_textBox">
+            <th><td>삭제</td><td>내용</td></th>
         {% for todo in list_of_todo_completed %}
-            <tr><td> {{ todo.text }} </td></tr> 
+            <tr>
+                <td><form  method = "post" action =  '{% url "delete_todo" %}'>
+                        {% csrf_token %}
+                        <input name = "id" value ="{{todo.id}}" hidden>
+                        <button type="submit" 
+                            id = "{{todo.text}}_delete_button"
+                            data-toggle="tooltip" data-placement="top" title="삭제">
+                        </button>
+                </form> </td>
+                <td> {{ todo.text }} </td>
+            </tr> 
         {% endfor %}
         </table>
 
