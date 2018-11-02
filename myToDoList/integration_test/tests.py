@@ -1,8 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from django.test import LiveServerTestCase
-#from main.models import Category,History
-#from main.process import db_reset ,WeekAndDay
+from lists.models import ToDo
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait 
 from selenium.webdriver.support import expected_conditions
@@ -17,6 +16,7 @@ class BaseTest(LiveServerTestCase):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(1)   # 암묵적 대기 -- 1초
         
+        ToDo.objects.create(text = "어제 등록한 할 일")
     def tearDown(self):
         """테스트 후에 시행-- 테스트에 에러가 발생해도 실행된다"""
         self.browser.quit()
@@ -70,16 +70,32 @@ class VisitorTest(BaseTest):
         #edith가 해당 웹사이트 방문
         self.browser.get(self.live_server_url)
 
-        # "ToDoList 만들기"를 텍스트 상자에 입력
-        self.browser.find_element_by_id("todo_inputBox").send_keys("ToDoList 만들기")
-        self.browser.find_element_by_id("add_todo_button").click()
-        
-        # "ToDoList 만들기"를 완료함
-        self.browser.find_element_by_id("ToDoList 만들기_complete_button").click()
+        # "어제 등록한 할 일"를 완료함
+        self.browser.find_element_by_id("어제 등록한 할 일_complete_button").click()
 
-        # # 페이지가 갱신되면서 "ToDoList 만들기"가 완료된 todo에  입력됨
+        # # 페이지가 갱신되면서 "ToDoList 만들기"가 완료된 todo로 이동함
         rows_text = self.find_rows_from_table_id("todo_textBox")
-        self.assertNotIn('ToDoList 만들기', rows_text)
+        self.assertNotIn('어제 등록한 할 일', rows_text)
         
         rows_text2 = self.find_rows_from_table_id("todo_complete_textBox")
-        self.assertIn('ToDoList 만들기', rows_text2)
+        self.assertIn('어제 등록한 할 일', rows_text2)
+
+    def test_delete_button_work_well(self):
+        """ 삭제 처리가 제대로 되는지 체크한다"""
+        #edith가 해당 웹사이트 방문
+        self.browser.get(self.live_server_url)
+
+        #"어제 등록한 할일"이 보인다.
+        rows_text = self.find_rows_from_table_id("todo_textBox")
+        self.assertIn('어제 등록한 할 일', rows_text)
+        
+        # "어제 등록한 할 일"를 삭제함
+        self.browser.find_element_by_id("어제 등록한 할 일_delete_button").click()
+
+        # "어제 등록한 할 일"이 어디에도 보이지 않는다.
+        rows_text = self.find_rows_from_table_id("todo_textBox")
+        self.assertNotIn('어제 등록한 할 일', rows_text)
+        
+        rows_text = self.find_rows_from_table_id("todo_complete_textBox")
+        self.assertNotIn('어제 등록한 할 일', rows_text)
+        
