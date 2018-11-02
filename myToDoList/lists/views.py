@@ -4,13 +4,22 @@ from lists.models import ToDo
 from datetime import date, datetime
 def root(request:HttpRequest):
 
-    return render(request, 'root.html', 
-    #먼저 due가 있는 것들을 오름차순 정렬, 뒤에 due가 없는 것들 정렬
-        {'list_of_todo': list(ToDo.objects.filter(completed = False).exclude(due = None).order_by('-priority','due')) +
-                                list(ToDo.objects.filter(completed = False, due = None).order_by('-priority')), 
-        'list_of_todo_completed' : list(ToDo.objects.filter(completed = True).exclude(due = None).order_by('due')) +
-                                        list(ToDo.objects.filter(completed = True, due = None).order_by('due')),
-        'today' : date.today()})
+        list_of_todo = list(ToDo.objects.filter(completed = False).exclude(due = None).order_by('-priority','due')) +\
+                                list(ToDo.objects.filter(completed = False, due = None).order_by('-priority'))
+        
+        lot = []
+        for todo in list_of_todo:
+                if todo.due == None:
+                        lot.append((todo,None))
+                else:
+                        lot.append( (todo,date.strftime(todo.due,"%Y-%m-%d")) )
+        
+        return render(request, 'root.html', 
+                #먼저 due가 있는 것들을 오름차순 정렬, 뒤에 due가 없는 것들 정렬
+                {'list_of_todo': lot  , 
+                'list_of_todo_completed' : list(ToDo.objects.filter(completed = True).exclude(due = None).order_by('due')) +
+                                                list(ToDo.objects.filter(completed = True, due = None).order_by('due')),
+                'today' : date.today()})
 
 def add_todo(request:HttpRequest):
         if request.method == 'POST':
