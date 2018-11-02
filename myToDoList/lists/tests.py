@@ -97,3 +97,17 @@ class AddAndEditToDoTest(TestCase):
         self.assertEqual(saved_td.text, 'test1')
         self.assertEqual(saved_td.priority, 3)
         self.assertEqual(saved_td.due , date.today())
+
+    def test_can_process_uncomplete_POST_requset(self):
+        ToDo.objects.create(text = "test2",  completed = True)
+
+        response = self.client.post(
+            '/uncomplete_todo/',
+            data = {'id' : 1}
+        )
+
+        saved_td = ToDo.objects.first()
+
+        self.assertEqual(saved_td.text, 'test2')
+        self.assertFalse(saved_td.completed)
+        

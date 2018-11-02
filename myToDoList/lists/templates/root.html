@@ -53,7 +53,7 @@
                                         <input name = "id" value ="{{todo.id}}" hidden>
                                         <button type="submit" 
                                             id = "{{todo.text}}_complete_button"
-                                            data-toggle="tooltip" data-placement="top" title="todo 완료" class = "btn">
+                                            data-toggle="tooltip" data-placement="top" title="완료" class = "btn">
                                         <span class = "glyphicon glyphicon-ok"></span>
                                         </button>
                                 </form> </td>
@@ -67,7 +67,7 @@
                                         <input name = "id" value ="{{todo.id}}" hidden>
                                         <button type="submit" 
                                             id = "{{todo.text}}_delete_button"
-                                            data-toggle="tooltip" data-placement="top" title="todo 삭제" class= "btn">
+                                            data-toggle="tooltip" data-placement="top" title="삭제" class= "btn">
                                             <span class= "glyphicon glyphicon-remove"></span>
                                         </button>
                                 </form> </td>
@@ -120,9 +120,19 @@
                 <div class = "row"><div class ="col-xs-12 col-md-8 col-md-offset-2 jumbotron">
                     <h3>끝난 일들</h3>
                     <table id = "todo_complete_textBox" class = "col-xs-12 table table-hover">
-                        <tr><th>삭제</th><th>기한</th><th>내용</th></tr>
+                        <tr><th>완료해제</th><th>삭제</th><th>기한</th><th>내용</th></tr>
                     {% for todo in list_of_todo_completed %}
                         <tr>
+                            <td><form  method = "post" action =  '{% url "uncomplete_todo" %}'>
+                                    {% csrf_token %}
+                                    <input name = "id" value ="{{todo.id}}" hidden>
+                                    <button type="submit" 
+                                        id = "{{todo.text}}_uncomplete_button"
+                                        data-toggle="tooltip" data-placement="top" title="완료해제" class = "btn">
+                                        <span class= "glyphicon glyphicon glyphicon-arrow-up"></span>
+                                    </button>
+                            </form> </td>
+
                             <td><form  method = "post" action =  '{% url "delete_todo" %}'>
                                     {% csrf_token %}
                                     <input name = "id" value ="{{todo.id}}" hidden>
