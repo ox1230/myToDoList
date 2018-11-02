@@ -23,9 +23,12 @@ def root(request:HttpRequest):
 
 def add_todo(request:HttpRequest):
         if request.method == 'POST':
+                if request.POST['todo_due']: due = datetime.strptime(request.POST['todo_due'],"%Y-%m-%d")
+                else: due = None
                 temp = ToDo(text = request.POST['todo_text'], 
                         priority = request.POST['todo_priority'],
-                        due = datetime.strptime(request.POST['todo_due'],"%Y-%m-%d"))
+                        due = due,      
+                )
 
                 temp.save()
                 return redirect('root')
