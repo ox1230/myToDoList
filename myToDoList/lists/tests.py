@@ -38,6 +38,15 @@ class ListsViewTest(TestCase):
 
         self.assertTrue(ToDo.objects.first().completed)
 
+    def test_delete_todo_POST_request_works_well(self):
+        ToDo.objects.create(text = "test1")
+
+        response = self.client.post(
+            '/delete_todo/',
+            data = {'id' : 1 })
+
+        self.assertTrue(ToDo.objects.first() == None)
+
 
 class ToDoModelTest(TestCase):
        
@@ -53,7 +62,7 @@ class ToDoModelTest(TestCase):
         self.assertEqual(td.text ,name)
         self.assertFalse(td.completed)
 
-class AddToDoTest(TestCase):
+class AddAndEditToDoTest(TestCase):
     """ """
 
     def test_can_save_and_process_add_todo_POST_request(self):

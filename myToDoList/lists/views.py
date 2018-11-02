@@ -19,3 +19,10 @@ def complete_todo(request:HttpRequest):
                 temp.completed = True
                 temp.save()
                 return redirect('root')
+
+
+def delete_todo(request:HttpRequest):
+        if request.method == 'POST':
+                temp = ToDo.objects.get(id = request.POST['id'])
+                temp.delete()
+                return redirect('root')
