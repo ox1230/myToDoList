@@ -5,15 +5,14 @@
         </title>
         <link href="https://fonts.googleapis.com/css?family=Gothic+A1&amp;subset=korean" rel="stylesheet">
         <link href="https://stackpath.bootstrapcdn.com/bootswatch/3.3.7/journal/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-        <script src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+        <script src = "https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     </head>
 
     <body>
             <div class = "container">
-                    <div class = "row"><div class ="col-xs-12 col-md-6 col-md-offset-3 jumbotron form-group">
+                    <div class = "row"><div class ="col-xs-12 col-md-8 col-md-offset-2 jumbotron form-group">
                         <h3>My ToDo List</h3>
                         <form method = "POST" action = '{% url "add_todo" %}'>
                             <div class = "row">
@@ -43,10 +42,10 @@
                         </form>
                     </div></div>
                     
-                    <div class = "row"><div class ="col-xs-12 col-md-6 col-md-offset-3 jumbotron">
+                    <div class = "row"><div class ="col-xs-12 col-md-8 col-md-offset-2 jumbotron">
                         <h3>진행중인 일들</h3>
                         <table id = "todo_textBox" class="col-xs-12 table table-hover">
-                            <tr><th>완료</th><th>삭제</th><th>기한</th><th>내용</th><th>중요도</th></tr>
+                            <tr><th>완료</th><th>수정</th><th>삭제</th><th>기한</th><th>내용</th><th>중요도</th></tr>
                             {% for todo in list_of_todo %}
                             <tr {% if todo.due < today %} class = "danger"  data-toggle="tooltip" data-placement="top" title="기한이 지났습니다"{% endif %}>
                                 <td><form  method = "post" action =  '{% url "complete_todo" %}'>
@@ -54,13 +53,13 @@
                                         <input name = "id" value ="{{todo.id}}" hidden>
                                         <button type="submit" 
                                             id = "{{todo.text}}_complete_button"
-                                            data-toggle="tooltip" data-placement="top" title="todo 완료">
+                                            data-toggle="tooltip" data-placement="top" title="todo 완료" class = "btn">
                                         <span class = "glyphicon glyphicon-ok"></span>
                                         </button>
                                 </form> </td>
                                 <td>
-                                    <button type="button" class="btn" data-toggle="collapse" id="#{{todo.text}}_edit_button" data-target="">
-                                        <span class = "glyphicon glyphicon-edit"></span>
+                                    <button type="button" class="btn" data-toggle="collapse" id="{{todo.text}}_edit_button" data-target="#{{todo.id}}_editor">
+                                        <span class = "glyphicon glyphicon-edit" id = "{{todo.id}}_gly"></span>
                                     </button>
                                 </td>
                                 <td><form  method = "post" action =  '{% url "delete_todo" %}'>
@@ -68,7 +67,7 @@
                                         <input name = "id" value ="{{todo.id}}" hidden>
                                         <button type="submit" 
                                             id = "{{todo.text}}_delete_button"
-                                            data-toggle="tooltip" data-placement="top" title="todo 삭제">
+                                            data-toggle="tooltip" data-placement="top" title="todo 삭제" class= "btn">
                                             <span class= "glyphicon glyphicon-remove"></span>
                                         </button>
                                 </form> </td>
@@ -80,12 +79,45 @@
                                     {% endif %}
                                 </td>
                             </tr>
+                            <tr class="collapse out" id="{{todo.id}}_editor">
+                                    <form method = "POST" action = '{% url "edit_todo" %}'>
+                                            <input hidden name = "id" value = "{{todo.id}}">
+                                            <td>
+                                                <button id = "{{todo.text}}_edit_commit_button" type = "submit" class = "btn btn-sucess">
+                                                    <span class = "glyphicon glyphicon-floppy-saved"></span>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                    <button type="button" class="btn" data-toggle="collapse" id="{{todo.text}}_edit_button" data-target="#{{todo.id}}_editor">
+                                                            <span class = "glyphicon glyphicon-eject" id = "{{todo.id}}_gly"></span>
+                                                    </button>
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                <input name = "todo_due" id = "{{todo.text}}_due_editBox" placeholder ="Due Date" type = 'date'  class= "form-control" value = "{{todo.due}}">
+                                            </td>
+                                            <td>
+                                                <input name = "todo_text" id = "{{todo.text}}_editBox" placeholder="todo" class= "form-control" value = "{{todo.text}}"> 
+                                            </td>
+                                            
+                                            <td> 
+                                                <select name = "todo_priority" id = "{{todo.text}}_priority_editBox"  class= "form-control">
+                                                    <option value = 1 {% if todo.priority == 1 %} selected {% endif %}>보통</option>
+                                                    <option value = 2 {% if todo.priority == 2 %} selected {% endif %}>중요</option>
+                                                    <option value = 3 {% if todo.priority == 3 %} selected {% endif %}>매우 중요</option>
+                                                </select>
+                                            </td>
+                                                {% csrf_token %}
+                                        </form>
+                            </tr>
+                            
+                            
                         {% endfor %}
                         </table>
                 </div></div>
         
 
-                <div class = "row"><div class ="col-xs-12 col-md-6 col-md-offset-3 jumbotron">
+                <div class = "row"><div class ="col-xs-12 col-md-8 col-md-offset-2 jumbotron">
                     <h3>끝난 일들</h3>
                     <table id = "todo_complete_textBox" class = "col-xs-12 table table-hover">
                         <tr><th>삭제</th><th>기한</th><th>내용</th></tr>
@@ -96,7 +128,7 @@
                                     <input name = "id" value ="{{todo.id}}" hidden>
                                     <button type="submit" 
                                         id = "{{todo.text}}_delete_button"
-                                        data-toggle="tooltip" data-placement="top" title="삭제">
+                                        data-toggle="tooltip" data-placement="top" title="삭제" class = "btn">
                                         <span class= "glyphicon glyphicon-remove"></span>
                                     </button>
                             </form> </td>
@@ -108,5 +140,8 @@
                 </div>
         </div>
     </body>
+
+
+
 
 </html>

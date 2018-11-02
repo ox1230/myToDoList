@@ -33,3 +33,14 @@ def delete_todo(request:HttpRequest):
                 temp = ToDo.objects.get(id = request.POST['id'])
                 temp.delete()
                 return redirect('root')
+
+def edit_todo(request:HttpRequest):
+        if request.method == "POST":
+                data = request.POST
+                temp = ToDo.objects.get(id = data['id'])
+                temp.text = data['todo_text']
+                temp.priority = data['todo_priority']
+                if data['todo_due'] != "" : temp.due = datetime.strptime(data['todo_due'], "%Y-%m-%d")
+                temp.save()
+
+                return redirect('root')

@@ -80,3 +80,20 @@ class AddAndEditToDoTest(TestCase):
         self.assertEqual(saved_td.text, 'test')
         self.assertEqual(saved_td.priority, 3)
         self.assertEqual(saved_td.due , date.today())
+
+    def test_can_process_edit_POST_request(self):
+        ToDo.objects.create(text = 'test1', priority = 2)
+
+        response = self.client.post(
+            '/edit_todo/',
+            data = {'id' : 1,
+                    'todo_text' : 'test1',
+                    'todo_priority': 3,
+                    'todo_due' : date.today(),
+        })
+
+        saved_td = ToDo.objects.first()
+
+        self.assertEqual(saved_td.text, 'test1')
+        self.assertEqual(saved_td.priority, 3)
+        self.assertEqual(saved_td.due , date.today())
