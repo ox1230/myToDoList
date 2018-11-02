@@ -8,7 +8,7 @@
     <body>
         <form method = "POST" action = '{% url "add_todo" %}'>
             <input name = "todo_text" id = "todo_inputBox" placeholder="todo 항목 입력"  >
-            <select name = "todo_priority" id = "priority_select_box">
+            <select name = "todo_priority" id = "priority_selectBox">
                 <option value = 1 selected>보통</option>
                 <option value = 2>중요</option>
                 <option value = 3>매우 중요</option>
@@ -18,7 +18,7 @@
         </form>
 
         <table id = "todo_textBox">
-            <th><td>완료</td><td>삭제</td><td>내용</td></th>
+            <th><td>완료</td><td>삭제</td><td>내용</td><td>중요도</td></th>
             {% for todo in list_of_todo %}
             <tr>
                 <td><form  method = "post" action =  '{% url "complete_todo" %}'>
@@ -39,6 +39,11 @@
                 </form> </td>
 
                 <td> {{ todo.text }} </td> 
+                <td> {% if todo.priority == 1 %}보통
+                    {% elif todo.priority == 2 %}중요
+                    {% elif todo.priority == 3 %}매우 중요
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </table>

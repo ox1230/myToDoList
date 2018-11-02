@@ -76,4 +76,4 @@ class AddAndEditToDoTest(TestCase):
         saved_td = ToDo.objects.first()
 
         self.assertEqual(saved_td.text, 'test')
-        self.assertEqual(saved_td.prioirity, 'test')
+        self.assertEqual(saved_td.priority, 3)

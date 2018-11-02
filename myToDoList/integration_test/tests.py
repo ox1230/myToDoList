@@ -80,7 +80,7 @@ class VisitorTest(BaseTest):
 
         # # 페이지가 갱신되면서 "ToDoList 만들기"가 완료된 todo로 이동함
         rows_text = self.find_rows_from_table_id("todo_textBox")
-        self.assertNotIn('어제 등록한 할 일', rows_text)
+        self.assertNotIn('어제 등록한 할 일 보통', rows_text)
         
         rows_text2 = self.find_rows_from_table_id("todo_complete_textBox")
         self.assertIn('어제 등록한 할 일', rows_text2)
@@ -92,14 +92,14 @@ class VisitorTest(BaseTest):
 
         #"어제 등록한 할일"이 보인다.
         rows_text = self.find_rows_from_table_id("todo_textBox")
-        self.assertIn('어제 등록한 할 일', rows_text)
+        self.assertIn('어제 등록한 할 일 보통', rows_text)
         
         # "어제 등록한 할 일"를 삭제함
         self.browser.find_element_by_id("어제 등록한 할 일_delete_button").click()
 
         # "어제 등록한 할 일"이 어디에도 보이지 않는다.
         rows_text = self.find_rows_from_table_id("todo_textBox")
-        self.assertNotIn('어제 등록한 할 일', rows_text)
+        self.assertNotIn('어제 등록한 할 일 보통', rows_text)
         
         rows_text = self.find_rows_from_table_id("todo_complete_textBox")
         self.assertNotIn('어제 등록한 할 일', rows_text)
