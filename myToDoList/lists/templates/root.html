@@ -58,6 +58,11 @@
                                         <span class = "glyphicon glyphicon-ok"></span>
                                         </button>
                                 </form> </td>
+                                <td>
+                                    <button type="button" class="btn" data-toggle="collapse" id="#{{todo.text}}_edit_button" data-target="">
+                                        <span class = "glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </td>
                                 <td><form  method = "post" action =  '{% url "delete_todo" %}'>
                                         {% csrf_token %}
                                         <input name = "id" value ="{{todo.id}}" hidden>

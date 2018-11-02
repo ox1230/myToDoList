@@ -106,3 +106,27 @@ class VisitorTest(BaseTest):
         rows_text = self.find_rows_from_table_id("todo_complete_textBox")
         self.assertNotIn('어제 등록한 할 일', rows_text)
         
+    def test_edit_button_work_well(self):
+        #edith가 해당 웹사이트 방문
+        self.browser.get(self.live_server_url)
+
+        #"어제 등록한 할일"이 보인다.
+        rows_text = self.find_rows_from_table_id("todo_textBox")
+        self.assertIn('어제 등록한 할 일 보통', rows_text)
+        
+        # "어제 등록한 할 일"를 수정함
+        self.browser.find_element_by_id("어제 등록한 할 일_edit_button").click()
+
+        # "매우 중요",dueDate는 2018-11-4일까지로 변경
+        el = self.browser.find_element_by_id('어제 등록한 할 일_priority_editBox')
+        for option in el.find_elements_by_tag_name('option'):
+            if option.text == '매우 중요':
+                option.click() 
+                break
+        self.browser.find_element_by_id("어제 등록한 할 일_due_editBox").send_keys("2018-11-04")
+        self.browser.find_element_by_id("어제 등록한 할 일_edit_commit_button").click()
+
+        #수정완료
+        rows_text = self.find_rows_from_table_id("todo_textBox")
+        self.assertNotIn('어제 등록한 할 일 보통', rows_text)
+        self.assertIn('~Nov. 4, 2018 어제 등록한 할 일 매우 중요', rows_text)
