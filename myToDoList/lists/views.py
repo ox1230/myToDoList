@@ -26,7 +26,7 @@ def add_todo(request:HttpRequest):
         if request.method == 'POST':
                 if request.POST['todo_due']: due = datetime.strptime(request.POST['todo_due'],"%Y-%m-%d")
                 else: due = None
-                temp = ToDo(text = request.POST['todo_text'], 
+                temp = ToDo(title = request.POST['todo_title'], 
                         priority = request.POST['todo_priority'],
                         due = due,      
                 )
@@ -59,7 +59,7 @@ def edit_todo(request:HttpRequest):
         if request.method == "POST":
                 data = request.POST
                 temp = ToDo.objects.get(id = data['id'])
-                temp.text = data['todo_text']
+                temp.title = data['todo_title']
                 temp.priority = data['todo_priority']
                 if data['todo_due'] != "" : temp.due = datetime.strptime(data['todo_due'], "%Y-%m-%d")
                 else: temp.due = None

@@ -17,8 +17,8 @@ def remove_csrf_tag(text):
 class ListsViewTest(TestCase):
 
     def test_root_url_resolves_root_page_correctly(self):
-        ToDo.objects.create(text = "test1")
-        ToDo.objects.create(text = "test2", completed = True)
+        ToDo.objects.create(title = "test1")
+        ToDo.objects.create(title = "test2", completed = True)
 
         response = self.client.get('')  
 
@@ -28,7 +28,7 @@ class ListsViewTest(TestCase):
         self.assertIn('test2', response.content.decode())
     
     def test_complete_todo_POST_request_works_well(self):
-        ToDo.objects.create(text = "test1")
+        ToDo.objects.create(title = "test1")
         
         self.assertFalse(ToDo.objects.first().completed)
 
@@ -39,7 +39,7 @@ class ListsViewTest(TestCase):
         self.assertTrue(ToDo.objects.first().completed)
 
     def test_delete_todo_POST_request_works_well(self):
-        ToDo.objects.create(text = "test1")
+        ToDo.objects.create(title = "test1")
 
         response = self.client.post(
             '/delete_todo/',
@@ -55,7 +55,7 @@ class ToDoModelTest(TestCase):
         name= "test"
         completed = False
 
-        ToDo.objects.create(text = name, completed = completed, priority = 2, due = date.today())
+        ToDo.objects.create(title = name, completed = completed, priority = 2, due = date.today())
 
         td = ToDo.objects.first()
 
@@ -82,7 +82,7 @@ class AddAndEditToDoTest(TestCase):
         self.assertEqual(saved_td.due , date.today())
 
     def test_can_process_edit_POST_request(self):
-        ToDo.objects.create(text = 'test1', priority = 2)
+        ToDo.objects.create(title = 'test1', priority = 2)
 
         response = self.client.post(
             '/edit_todo/',
@@ -94,12 +94,12 @@ class AddAndEditToDoTest(TestCase):
 
         saved_td = ToDo.objects.first()
 
-        self.assertEqual(saved_td.text, 'test1')
+        self.assertEqual(saved_td.title, 'test1')
         self.assertEqual(saved_td.priority, 3)
         self.assertEqual(saved_td.due , date.today())
 
     def test_can_process_uncomplete_POST_requset(self):
-        ToDo.objects.create(text = "test2",  completed = True)
+        ToDo.objects.create(title = "test2",  completed = True)
 
         response = self.client.post(
             '/uncomplete_todo/',
