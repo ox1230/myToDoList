@@ -46,7 +46,7 @@ class BaseTest(LiveServerTestCase):
 class VisitorTest(BaseTest):
         
     def test_todo_and_can_see_it(self):
-        """기본기능이 제대로 되는지 테스트한다. ( todo 입력+ 우선순위 설정 + 날짜 설정, 보기)"""
+        """기본기능이 제대로 되는지 테스트한다. ( todo 입력(제목+내용)+ 우선순위 설정 + 날짜 설정, 보기)"""
 
         #edith가 해당 웹사이트 방문
         self.browser.get(self.live_server_url)
@@ -62,14 +62,15 @@ class VisitorTest(BaseTest):
                 option.click() 
                 break
         self.browser.find_element_by_id("todo_due_inputBox").send_keys("2018-11-04")
+        self.browser.find_element_by_id("todo_contents_inputBox").send_keys("열심히 만든다.")  
         self.browser.find_element_by_id("add_todo_button").click()
         
 
         # 페이지가 갱신되면서 "ToDoList 만들기"가 텍스트 상자에 입력됨
         rows_text = self.find_rows_from_table_id("todo_textBox")
         self.assertIn('~Nov. 4, 2018 ToDoList 만들기 매우 중요', rows_text)
+        self.assertIn("열심히 만든다.", rows_text)
         
-
 
     def test_completed_button_work_well(self):
         """ 완료 처리가 제대로 되는지 체크한다. """
@@ -117,16 +118,22 @@ class VisitorTest(BaseTest):
         # "어제 등록한 할 일"를 수정함
         self.browser.find_element_by_id("어제 등록한 할 일_edit_button").click()
 
-        # "매우 중요",dueDate는 2018-11-4일까지로 변경
+        # "매우 중요",dueDate는 2018-11-4일까지로 변경, "점심전에 끝내기" 내용 추가
         el = self.browser.find_element_by_id('어제 등록한 할 일_priority_editBox')
         for option in el.find_elements_by_tag_name('option'):
             if option.text == '매우 중요':
                 option.click() 
                 break
         self.browser.find_element_by_id("어제 등록한 할 일_due_editBox").send_keys("2018-11-04")
+        
+        self.browser.find_element_by_id("어제 등록한 할 일_contents_editBox").clear()
+        self.browser.find_element_by_id("어제 등록한 할 일_contents_editBox").send_keys("점심 전에 끝내기")
+        
         self.browser.find_element_by_id("어제 등록한 할 일_edit_commit_button").click()
 
         #수정완료
         rows_text = self.find_rows_from_table_id("todo_textBox")
         self.assertNotIn('어제 등록한 할 일 보통', rows_text)
         self.assertIn('~Nov. 4, 2018 어제 등록한 할 일 매우 중요', rows_text)
+        self.assertIn('점심 전에 끝내기', rows_text)
+        
