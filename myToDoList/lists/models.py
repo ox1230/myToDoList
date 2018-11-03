@@ -6,5 +6,7 @@ class ToDo(models.Model):
     priority = models.PositiveIntegerField(default = 1)
     due = models.DateField(null = True, default = None)
 
+    contents = models.TextField(null = True, default = "")
+
     def __str__(self):
         return self.title

@@ -54,8 +54,9 @@ class ToDoModelTest(TestCase):
         
         name= "test"
         completed = False
-
-        ToDo.objects.create(title = name, completed = completed, priority = 2, due = date.today())
+        contents = "for test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        ToDo.objects.create(title = name, completed = completed, priority = 2, due = date.today(),
+            contents = contents)
 
         td = ToDo.objects.first()
 
@@ -63,6 +64,7 @@ class ToDoModelTest(TestCase):
         self.assertFalse(td.completed)
         self.assertEqual(td.priority, 2)
         self.assertEqual(td.due , date.today())
+        self.assertEqual(td.contents , contents)
 
 class AddAndEditToDoTest(TestCase):
 
@@ -73,6 +75,7 @@ class AddAndEditToDoTest(TestCase):
             data = {'todo_title' : 'test',
                     'todo_priority': 3,
                     'todo_due' : date.today(),
+                    'todo_contents': "it's contents!!"
         })
 
         saved_td = ToDo.objects.first()
@@ -80,7 +83,8 @@ class AddAndEditToDoTest(TestCase):
         self.assertEqual(saved_td.title, 'test')
         self.assertEqual(saved_td.priority, 3)
         self.assertEqual(saved_td.due , date.today())
-
+        self.assertEqual(saved_td.contents, "it's contents!!")
+        
     def test_can_process_edit_POST_request(self):
         ToDo.objects.create(title = 'test1', priority = 2)
 
@@ -90,6 +94,7 @@ class AddAndEditToDoTest(TestCase):
                     'todo_title' : 'test1',
                     'todo_priority': 3,
                     'todo_due' : date.today(),
+                    'todo_contents' : "it's contents!!"
         })
 
         saved_td = ToDo.objects.first()
@@ -97,6 +102,8 @@ class AddAndEditToDoTest(TestCase):
         self.assertEqual(saved_td.title, 'test1')
         self.assertEqual(saved_td.priority, 3)
         self.assertEqual(saved_td.due , date.today())
+        self.assertEqual(saved_td.contents, "it's contents!!")
+        
 
     def test_can_process_uncomplete_POST_requset(self):
         ToDo.objects.create(title = "test2",  completed = True)
