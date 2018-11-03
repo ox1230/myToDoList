@@ -11,8 +11,8 @@
     </head>
 
     <body>
-            <div class = "container">
-                    <div class = "row"><div class ="col-xs-12 col-md-8 col-md-offset-2 jumbotron form-group">
+            <div class = "container col-xs-12 col-md-8 col-md-offset-2">
+                    <div class = "row"><div class ="jumbotron form-group">
                         <h3>My ToDo List</h3>
                         <form method = "POST" action = '{% url "add_todo" %}'>
                             <div class = "row">
@@ -33,22 +33,34 @@
                                 <label for="todo_due_inputBox">기한:</label>
                                 <input name = "todo_due" id = "todo_due_inputBox" placeholder ="Due Date" type = 'date'  class= "form-control">
                             </div>
-                    
+                            
                             <div class = "row">
-                                <button id = "add_todo_button" type = "submit" class = "btn btn-success">기록</button>
+                                <label for="todo_contents_inputBox">내용:</label>
+                                <textarea name = "todo_contents" id = "todo_contents_inputBox" placeholder="todo contents" class= "form-control input-lg"></textarea>
+                            </div>
+                            <br>
+                            <div class = "row">
+                                <button id = "add_todo_button" type = "submit" class = "btn btn-success">저장</button>
                             </div>
                             
                                 {% csrf_token %}
                         </form>
                     </div></div>
                     
-                    <div class = "row"><div class ="col-xs-12 col-md-8 col-md-offset-2 jumbotron">
+                    <div class = "row"><div class ="jumbotron">
                         <h3>진행중인 일들</h3>
-                        <table id = "todo_textBox" class="col-xs-12 table table-hover">
-                            <tr><th>완료</th><th>수정</th><th>삭제</th><th>기한</th><th>내용</th><th>우선도</th></tr>
+                        <table id = "todo_textBox" class="table table-hover">
+                            <tr>
+                                <th class = "col-xs-1">완료</th>
+                                <th class = "col-xs-1">수정</th>
+                                <th class = "col-xs-1">삭제</th>
+                                <th class = "col-xs-2">기한</th>
+                                <th>내용</th>
+                                <th class = "col-xs-2 col-xs-offset-10">우선도</th>
+                            </tr>
                             {% for todo,strform_date in list_of_todo %}
                             <tr {% if todo.due < today %} class = "danger"  data-toggle="tooltip" data-placement="top" title="기한이 지났습니다"{% endif %}>
-                                <td><form  method = "post" action =  '{% url "complete_todo" %}'>
+                                <td class="col-xs-1"><form  method = "post" action =  '{% url "complete_todo" %}'>
                                         {% csrf_token %}
                                         <input name = "id" value ="{{todo.id}}" hidden>
                                         <button type="submit" 
@@ -57,12 +69,12 @@
                                         <span class = "glyphicon glyphicon-ok"></span>
                                         </button>
                                 </form> </td>
-                                <td>
-                                    <button type="button" class="btn" data-toggle="collapse" id="{{todo.title}}_edit_button" data-target="#{{todo.id}}_editor">
+                                <td class = "col-xs-1">
+                                    <button type="button" class="btn" data-toggle="collapse" id="{{todo.title}}_edit_button" data-target=".{{todo.id}}_editor">
                                         <span class = "glyphicon glyphicon-edit" id = "{{todo.id}}_gly"></span>
                                     </button>
                                 </td>
-                                <td><form  method = "post" action =  '{% url "delete_todo" %}'>
+                                <td class = "col-xs-1"><form  method = "post" action =  '{% url "delete_todo" %}'>
                                         {% csrf_token %}
                                         <input name = "id" value ="{{todo.id}}" hidden>
                                         <button type="submit" 
@@ -71,59 +83,75 @@
                                             <span class= "glyphicon glyphicon-remove"></span>
                                         </button>
                                 </form> </td>
-                                <td> {% if todo.due %}~{{ todo.due }} {% endif %} </td>
+                                <td class = "col-xs-3"> {% if todo.due %}~{{ todo.due }} {% endif %} </td>
                                 <td> {{ todo.title }} </td> 
-                                <td> {% if todo.priority == 1 %}보통
+                                <td class = "col-xs-2 col-xs-offset-10">{% if todo.priority == 1 %}보통
                                     {% elif todo.priority == 2 %}중요
                                     {% elif todo.priority == 3 %}매우 중요
-                                    {% endif %}
-                                </td>
+                                    {% endif %}</td>
                             </tr>
-                            <tr class="collapse out" id="{{todo.id}}_editor">
-                                    <form method = "POST" action = '{% url "edit_todo" %}'>
-                                            <input hidden name = "id" value = "{{todo.id}}">
-                                            <td>
-                                                <button id = "{{todo.title}}_edit_commit_button" type = "submit" class = "btn btn-sucess">
-                                                    <span class = "glyphicon glyphicon-floppy-saved"></span>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                    <button type="button" class="btn" data-toggle="collapse" id="{{todo.title}}_edit_button" data-target="#{{todo.id}}_editor">
-                                                            <span class = "glyphicon glyphicon-eject" id = "{{todo.id}}_gly"></span>
-                                                    </button>
-                                            </td>
-                                            <td></td>
-                                            <td>
-                                                <input name = "todo_due" id = "{{todo.title}}_due_editBox" placeholder ="Due Date" type = 'date'  class= "form-control" value = "{{strform_date}}">
-                                            </td>
-                                            <td>
-                                                <input name = "todo_title" id = "{{todo.title}}_editBox" placeholder="todo" class= "form-control" value = "{{todo.title}}"> 
-                                            </td>
-                                            
-                                            <td> 
-                                                <select name = "todo_priority" id = "{{todo.title}}_priority_editBox"  class= "form-control">
-                                                    <option value = 1 {% if todo.priority == 1 %} selected {% endif %}>보통</option>
-                                                    <option value = 2 {% if todo.priority == 2 %} selected {% endif %}>중요</option>
-                                                    <option value = 3 {% if todo.priority == 3 %} selected {% endif %}>매우 중요</option>
-                                                </select>
-                                            </td>
-                                                {% csrf_token %}
-                                        </form>
+                            {% if todo.contents %}
+                            <tr {% if todo.due < today %} class = "danger"  data-toggle="tooltip" data-placement="top" title="기한이 지났습니다"{% endif %}>
+                                <td class = "col-xs-1"></td>
+                                <td class = "col-xs-1"></td>
+                                <td class = "col-xs-1"><i class="glyphicon glyphicon-arrow-right"></i></td>
+                                <td colspan = 3>{{todo.contents}} </td>
                             </tr>
-                            
-                            
+                            {% endif %}
+                            <form method = "POST" action = '{% url "edit_todo" %}'>
+                                <tr class="collapse out {{todo.id}}_editor">
+                                
+                                    <input hidden name = "id" value = "{{todo.id}}">
+                                    <td class = "col-xs-1">
+                                        <button id = "{{todo.title}}_edit_commit_button" type = "submit" class = "btn btn-sucess">
+                                            <span class = "glyphicon glyphicon-floppy-saved"></span>
+                                        </button>
+                                    </td>
+                                    <td class = "col-xs-1">
+                                            <button type="button" class="btn" data-toggle="collapse" id="{{todo.title}}_edit_button" data-target=".{{todo.id}}_editor">
+                                                    <span class = "glyphicon glyphicon-chevron-down" id = "{{todo.id}}_gly"></span>
+                                            </button>
+                                    </td>
+                                    <td></td>
+                                    <td class = "col-xs-2">
+                                        <input name = "todo_due" id = "{{todo.title}}_due_editBox" placeholder ="Due Date" 
+                                            type = 'date'  class= "form-control input-sm" value = "{{strform_date}}">
+                                    </td>
+                                    <td>
+                                        <input name = "todo_title" id = "{{todo.title}}_editBox" 
+                                            placeholder="todo" class= "form-control input-sm" value = "{{todo.title}}"> 
+                                    </td>
+                                    
+                                    <td class = "col-xs-2 col-xs-offset-10"> 
+                                        <select name = "todo_priority" id = "{{todo.title}}_priority_editBox"  class= "form-control input-sm">
+                                            <option value = 1 {% if todo.priority == 1 %} selected {% endif %}>보통</option>
+                                            <option value = 2 {% if todo.priority == 2 %} selected {% endif %}>중요</option>
+                                            <option value = 3 {% if todo.priority == 3 %} selected {% endif %}>매우 중요</option>
+                                        </select>
+                                    </td>
+                                        {% csrf_token %}
+                                </tr>
+                                <tr class="collapse out {{todo.id}}_editor">
+                                    <td class = "col-xs-1"></td>
+                                    <td class = "col-xs-1"></td>
+                                    <td class = "col-xs-1"></td>
+                                    <td colspan = 3>
+                                        <textarea name = "todo_contents" id = "{{todo.title}}_contents_editBox" 
+                                            placeholder="todo contents" class= "form-control">{{todo.contents}}</textarea>
+                                    </td>
+                            </form>       
                         {% endfor %}
                         </table>
                 </div></div>
         
 
-                <div class = "row"><div class ="col-xs-12 col-md-8 col-md-offset-2 jumbotron">
+                <div class = "row"><div class ="jumbotron">
                     <h3>끝난 일들</h3>
-                    <table id = "todo_complete_textBox" class = "col-xs-12 table table-hover">
-                        <tr><th>완료해제</th><th>삭제</th><th>기한</th><th>내용</th></tr>
+                    <table id = "todo_complete_textBox" class = "table table-hover">
+                        <tr><th class = "col-xs-1"></th><th class = "col-xs-1">삭제</th><th class = "col-xs-2">기한</th><th>내용</th></tr>
                     {% for todo in list_of_todo_completed %}
                         <tr>
-                            <td><form  method = "post" action =  '{% url "uncomplete_todo" %}'>
+                            <td class = "col-xs-1"><form  method = "post" action =  '{% url "uncomplete_todo" %}'>
                                     {% csrf_token %}
                                     <input name = "id" value ="{{todo.id}}" hidden>
                                     <button type="submit" 
@@ -133,7 +161,7 @@
                                     </button>
                             </form> </td>
 
-                            <td><form  method = "post" action =  '{% url "delete_todo" %}'>
+                            <td class = "col-xs-1"><form  method = "post" action =  '{% url "delete_todo" %}'>
                                     {% csrf_token %}
                                     <input name = "id" value ="{{todo.id}}" hidden>
                                     <button type="submit" 
@@ -142,9 +170,16 @@
                                         <span class= "glyphicon glyphicon-remove"></span>
                                     </button>
                             </form> </td>
-                            <td> {% if todo.due %}~{{ todo.due }} {% endif %}</td>
+                            <td class = "col-xs-3"> {% if todo.due %}~{{ todo.due }} {% endif %}</td>
                             <td> {{ todo.title }} </td>
                         </tr> 
+                        {% if todo.contents %}
+                            <tr>
+                                <td class = "col-xs-1"></td>
+                                <td class = "col-xs-1"><i class="glyphicon glyphicon-arrow-right"></i></td>
+                                <td colspan = 2>{{todo.contents}}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     </table>
                 </div>

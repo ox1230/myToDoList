@@ -26,6 +26,7 @@ def add_todo(request:HttpRequest):
         if request.method == 'POST':
                 if request.POST['todo_due']: due = datetime.strptime(request.POST['todo_due'],"%Y-%m-%d")
                 else: due = None
+                
                 temp = ToDo(title = request.POST['todo_title'], 
                         priority = request.POST['todo_priority'],
                         due = due,
