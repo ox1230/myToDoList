@@ -25,3 +25,10 @@ priority(우선도)는 디폴트로 1(보통)을 갖고, 2(중요),3(매우 중�
 만약 기한이 오늘 날짜보다 전이라면( 완료 기한을 초과했다면), 그 todo의 row는 빨갛게 변하며, 마우스를 가져가면 기한이 지났다고 알려준다.
 
 완료한 할일 목록에서는 버튼 선택을 통해 todo를 다시 완료 안했다고 처리하거나, 삭제할 수 있다.
+
+
+#실행 방법
+manage.py가 working directory로한 뒤
+manage.py를 python으로 실행해 db를 migrate하고, 이어서 runserver를 동작시킨다.
+-python manage.py migrate
+-python manage.py runserver
