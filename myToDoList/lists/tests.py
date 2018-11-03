@@ -59,7 +59,7 @@ class ToDoModelTest(TestCase):
 
         td = ToDo.objects.first()
 
-        self.assertEqual(td.text ,name)
+        self.assertEqual(td.title ,name)
         self.assertFalse(td.completed)
         self.assertEqual(td.priority, 2)
         self.assertEqual(td.due , date.today())
@@ -70,14 +70,14 @@ class AddAndEditToDoTest(TestCase):
         
         response = self.client.post(
             '/add_todo/',
-            data = {'todo_text' : 'test',
+            data = {'todo_title' : 'test',
                     'todo_priority': 3,
                     'todo_due' : date.today(),
         })
 
         saved_td = ToDo.objects.first()
 
-        self.assertEqual(saved_td.text, 'test')
+        self.assertEqual(saved_td.title, 'test')
         self.assertEqual(saved_td.priority, 3)
         self.assertEqual(saved_td.due , date.today())
 
@@ -87,7 +87,7 @@ class AddAndEditToDoTest(TestCase):
         response = self.client.post(
             '/edit_todo/',
             data = {'id' : 1,
-                    'todo_text' : 'test1',
+                    'todo_title' : 'test1',
                     'todo_priority': 3,
                     'todo_due' : date.today(),
         })
@@ -108,6 +108,6 @@ class AddAndEditToDoTest(TestCase):
 
         saved_td = ToDo.objects.first()
 
-        self.assertEqual(saved_td.text, 'test2')
+        self.assertEqual(saved_td.title, 'test2')
         self.assertFalse(saved_td.completed)
         

@@ -21,7 +21,7 @@
                             </div>
                      
                             <div class = "row"> 
-                                <label for="priority_selectBox">중요도:</label>
+                                <label for="priority_selectBox">우선도:</label>
                                 <select name = "todo_priority" id = "priority_selectBox"  class= "form-control">
                                     <option value = 1 selected>보통</option>
                                     <option value = 2>중요</option>
@@ -45,7 +45,7 @@
                     <div class = "row"><div class ="col-xs-12 col-md-8 col-md-offset-2 jumbotron">
                         <h3>진행중인 일들</h3>
                         <table id = "todo_textBox" class="col-xs-12 table table-hover">
-                            <tr><th>완료</th><th>수정</th><th>삭제</th><th>기한</th><th>내용</th><th>중요도</th></tr>
+                            <tr><th>완료</th><th>수정</th><th>삭제</th><th>기한</th><th>내용</th><th>우선도</th></tr>
                             {% for todo,strform_date in list_of_todo %}
                             <tr {% if todo.due < today %} class = "danger"  data-toggle="tooltip" data-placement="top" title="기한이 지났습니다"{% endif %}>
                                 <td><form  method = "post" action =  '{% url "complete_todo" %}'>

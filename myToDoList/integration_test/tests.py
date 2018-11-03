@@ -16,7 +16,7 @@ class BaseTest(LiveServerTestCase):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(1)   # 암묵적 대기 -- 1초
         
-        ToDo.objects.create(text = "어제 등록한 할 일")
+        ToDo.objects.create(title = "어제 등록한 할 일")
     def tearDown(self):
         """테스트 후에 시행-- 테스트에 에러가 발생해도 실행된다"""
         self.browser.quit()
